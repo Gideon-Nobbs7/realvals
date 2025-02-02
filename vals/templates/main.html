@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #ff4b6e;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            white-space: nowrap;
+        }
+
+        #yesBtn {
+            background-color: #ff4b6e;
+            color: white;
+        }
+
+        #noBtn {
+            background-color: #DCDCDC;
+            color: #333;
+            min-width: 200px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        #noBtn:hover {
+            transform: translate(
+                calc(Math.random() * 100px),
+                calc(Math.random() * 100px)
+            );
+        }
+
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: none;
+        }
+
+        .success-page {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .bears {
+            font-size: 5rem;
+            animation: bounce 1s infinite;
+        }
+
+        .message-box {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 1rem;
+        }
+
+        .message-box textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 1rem;
+            border: 2px solid #ff4b6e;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            resize: vertical;
+        }
+
+        .love-note {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 1rem;
+            display: none;
+            max-width: 400px;
+        }
+
+        .love-note p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #ff4b6e;
+            font-style: italic;
+            margin: 0;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .floating-hearts {
+            position: fixed;
+            font-size: 2rem;
+            animation: float 3s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh); opacity: 1; }
+            100% { transform: translateY(-100px); opacity: 0; }
+        }
+
+        #saveMessage {
+            background-color: #ff4b6e;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        #saveMessage:hover {
+            background-color: #e6375a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="proposal">
+            <h1>Will You Be My Valentine? 🌹</h1>
+            <div class="buttons">
+                <button id="yesBtn">Yes 💝</button>
+                <button id="noBtn">No 💔</button>
+            </div>
+        </div>
+        
+        <div class="success-page">
+            <div class="bears">🐻‍❄️❤️🐻</div>
+            <h1>Yay! You said YES! 🎉</h1>
+            <form method="POST" onsubmit="console.log('Form submitting with:', document.getElementById('loveMessage').value)">
+                {% csrf_token %}
+                <div class="message-box">
+                    <!-- <input type="text" id="loveMessage" name=""> -->
+                    <textarea id="loveMessage" name="msg" placeholder="Write a sweet message to express your feelings. Don't forget to add your name...❤️"></textarea>
+                    <button type="submit" id="saveMessage">Send Message 💌</button>
+                </div>
+            </form>
+            
+            <div class="love-note">
+                <p id="savedMessageText"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const proposal = document.querySelector('.proposal');
+        const successPage = document.querySelector('.success-page');
+        const saveMessageBtn = document.getElementById('saveMessage');
+        const loveMessage = document.getElementById('loveMessage');
+        const loveNote = document.querySelector('.love-note');
+        const savedMessageText = document.getElementById('savedMessageText');
+
+        const phrases = [
+            "No",
+            "Are you sure?",
+            "Really sure?",
+            "Pookie please",
+            "Don't do this to me",
+            "I'm gonna cry...😭😭😭😭",
+            "You're gonna break my heart🥺",
+            "You're breaking my heart!!",
+            "You're breaking my heart!!!",
+            "You've broken my heart💔"
+        ];
+
+        let currentPhraseIndex = 0;
+
+        noBtn.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+            
+            currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
+            noBtn.textContent = phrases[currentPhraseIndex];
+        });
+
+        noBtn.addEventListener('click', () => {
+            currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
+            noBtn.textContent = phrases[currentPhraseIndex];
+        });
+
+        yesBtn.addEventListener('click', () => {
+            proposal.style.display = 'none';
+            successPage.style.display = 'flex';
+            createFloatingHearts();
+        });
+
+        // saveMessageBtn.addEventListener('click', () => {
+        //     if (loveMessage.value.trim() !== '') {
+        //         savedMessageText.textContent = loveMessage.value;
+        //         loveNote.style.display = 'block';
+        //         loveMessage.value = '';
+        //         saveMessageBtn.textContent = 'Message Saved! 💝';
+        //         setTimeout(() => {
+        //             saveMessageBtn.textContent = 'Save Message 💌';
+        //         }, 2000);
+        //     }
+        // });
+
+        function createFloatingHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-hearts');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                document.body.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 3000);
+            }, 300);
+        }
+    </script>
+</body>
+</html>

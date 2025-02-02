@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: #08b598;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .body {
+            padding: 20px;
+        }
+        .body p {
+            margin: 0 0 10px;
+        }
+        .event-details {
+            margin: 20px 0;
+            background: #f9f9f9;
+            padding: 10px;
+            border-left: 4px solid #f31fb7;
+        }
+        .event-details p {
+            margin: 5px 0;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background: #ad068c;
+            color: #ffffff;
+            font-size: 12px;
+        }
+        .footer a {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+        .cta {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .cta a {
+            background-color: #fc574e;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .cta a:hover {
+            background-color: #36a085;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Proposal Acceptance</h1>
+        </div>
+        <div class="body">
+            <p>Dear, {{ name }}</p>
+            <p>Your valentine prooposal was accepted> Find below a message that was sent</p>
+            
+            <div class="event-details">
+                <p>{{ message }}</p>
+            </div>
+        </div>
+        <div class="footer">
+            <p>&copy; Gideon</p>
+    </div>
+</body>
+</html>
