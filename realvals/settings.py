@@ -27,9 +27,6 @@ SECRET_KEY = "django-insecure-=m&r1ph(&9+2h8^b+_k0h$9u0$7&w@fqw6_u=9kv4)_1gg@hw^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,14 +41,17 @@ INSTALLED_APPS = [
 ]
 
 ALLOWED_HOSTS = [
+    "outer-karla-sequa-888adfd4.koyeb.app",
     '127.0.0.1',  
     'localhost',  
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://outer-karla-sequa-888adfd4.koyeb.app"
 ]
 
 CORS_ALLOWED_ORIGINS = [
+    "https://outer-karla-sequa-888adfd4.koyeb.app"
 ]
 
 MIDDLEWARE = [
