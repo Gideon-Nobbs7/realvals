@@ -15,7 +15,7 @@ COPY entrypoint.sh /app/entrypoint.sh
 
 RUN chmod +x /app/entrypoint.sh
 
-RUN chmod 666 /app/db.sqlite3
+# RUN chmod 666 /app/db.sqlite3
 
 EXPOSE 8000
 

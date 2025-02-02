@@ -11,5 +11,10 @@ python manage.py migrate --noinput
 python manage.py makemigrations --noinput
 python manage.py migrate --noinput
 
+# Set permissions for the SQLite database file
+if [ -f /app/db.sqlite3 ]; then
+    chmod 644 /app/db.sqlite3
+fi
+
 # Start the Django server
 exec python manage.py runserver 0.0.0.0:8000
