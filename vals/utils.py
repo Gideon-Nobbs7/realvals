@@ -15,3 +15,17 @@ def send_yes_email(user_email, context):
         html_message=body,
         fail_silently=False
     )
+
+
+def send_message_back(user_email, context):
+    subject = "Proposal Acceptance"
+    body = render_to_string("messageback.html", context)
+
+    send_mail(
+        subject,
+        body,
+        settings.EMAIL_HOST_USER,
+        [user_email],
+        html_message=body,
+        fail_silently=False
+    )

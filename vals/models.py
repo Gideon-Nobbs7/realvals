@@ -10,6 +10,7 @@ class Customer(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField(default="myval@gmail.com")
     phone_number = models.CharField(max_length=20, default="0247965219")
+    message_to_lover = models.TextField(default="Hey [lover], I have...")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

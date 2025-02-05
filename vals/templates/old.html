@@ -80,10 +80,6 @@
             display: none;
         }
 
-        .email-page {
-            display: none;
-        }
-
         .email-input {
             width: 100%;
             padding: 1rem;
@@ -140,6 +136,27 @@
             margin: 0;
         }
 
+        .messages-container {
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .message-alert {
+            background-color: rgba(255, 75, 110, 0.1);
+            border: 2px solid #ff4b6e;
+            color: #ff4b6e;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-20px); }
@@ -175,27 +192,34 @@
 <body>
     <div class="container">
         <div class="proposal">
+            {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="message-alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
             <h1>Will You Be My Valentine? 🌹</h1>
             <div class="buttons">
                 <button id="yesBtn">Yes 💝</button>
                 <button id="noBtn">No 💔</button>
             </div>
         </div>
-
-            <!-- <div class="email-page">
-                <h1>Add Your Email 💌</h1>
-                <input name="user_email" type="email" id="emailInput" class="email-input" placeholder="Enter your email for a surprise..." required>
-                <button id="submitEmail" class="submit-btn">Continue 💕</button>
-            </div> -->
         
         <div class="success-page">
             <div class="bears">🐻‍❄️❤️🐻</div>
             <h1>Yay! You said YES! 🎉</h1>
+        
             <form method="POST" onsubmit="console.log('Form submitting with:', document.getElementById('loveMessage').value)">
                 {% csrf_token %}
                 <div class="message-box">
+                    <!-- <input type="text" id="loveMessage" name=""> -->
                     <input name="user_email" type="email" id="emailInput" class="email-input" placeholder="Enter your email for a surprise..." required>
-                    <button type="submit" id="saveMessage">Submit 💌</button>
+                    <!-- <textarea id="loveMessage" name="msg" placeholder="Write a sweet message to express your feelings. Don't forget to add your name...❤️"></textarea> -->
+                     
+                    <button type="submit" id="saveMessage">Submit Email 💌</button>
                 </div>
             </form>
             
@@ -209,10 +233,7 @@
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
         const proposal = document.querySelector('.proposal');
-        const emailPage = document.querySelector('.email-page');
         const successPage = document.querySelector('.success-page');
-        const emailInput = document.getElementById('emailInput');
-        const submitEmail = document.getElementById('submitEmail');
         const saveMessageBtn = document.getElementById('saveMessage');
         const loveMessage = document.getElementById('loveMessage');
         const loveNote = document.querySelector('.love-note');
@@ -251,22 +272,21 @@
 
         yesBtn.addEventListener('click', () => {
             proposal.style.display = 'none';
-            emailPage.style.display = 'block';
+            successPage.style.display = 'flex';
+            createFloatingHearts();
         });
 
-        submitEmail.addEventListener('click', () => {
-            if (emailInput.value.trim() !== '' && emailInput.checkValidity()) {
-                const emailHiddenInput = document.createElement('input');
-                emailHiddenInput.type = 'hidden';
-                emailHiddenInput.name = 'email';
-                emailHiddenInput.value = emailInput.value;
-                document.querySelector('form').appendChild(emailHiddenInput);
-
-                emailPage.style.display = 'none';
-                successPage.style.display = 'flex';
-                createFloatingHearts();
-            }
-        });
+        // saveMessageBtn.addEventListener('click', () => {
+        //     if (loveMessage.value.trim() !== '') {
+        //         savedMessageText.textContent = loveMessage.value;
+        //         loveNote.style.display = 'block';
+        //         loveMessage.value = '';
+        //         saveMessageBtn.textContent = 'Message Saved! 💝';
+        //         setTimeout(() => {
+        //             saveMessageBtn.textContent = 'Save Message 💌';
+        //         }, 2000);
+        //     }
+        // });
 
         function createFloatingHearts() {
             setInterval(() => {
