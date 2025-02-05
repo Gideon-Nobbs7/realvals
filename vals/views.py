@@ -9,7 +9,7 @@ from .utils import send_yes_email, send_message_back
 
 
 def main_page(request):
-    return render(request, "main.html")
+    return render(request, "old.html")
 
 
 @csrf_protect
