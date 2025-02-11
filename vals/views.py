@@ -9,6 +9,8 @@ from .utils import send_yes_email, send_message_back
 
 
 def main_page(request):
+    valentine_message = "🌹 Demo Version: Contact the developer to send your Valentine's surprise! ❤️"
+    messages.success(request, valentine_message)
     return render(request, "old.html")
 
 
